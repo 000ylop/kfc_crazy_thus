@@ -26,7 +26,7 @@ async fn main() {
             let weapon_next = get_weapon(weekday.succ());
 
             let content_text = InputMessageContentText::new(format!(
-                "{talent}\n{weapon}\n\n{rhour:02}:{rmin:02}:{rsec:02}后：\n{talent_next}\n{weapon_next}"
+                "{talent}\n{weapon}\n\n{rhour:02}:{rmin:02}:{rsec:02} 后:\n{talent_next}\n{weapon_next}"
             ));
             let content = InputMessageContent::Text(content_text);
 
@@ -70,7 +70,7 @@ fn get_talent(time: Weekday) -> String {
         Weekday::Wed | Weekday::Sat => talent::WED_SAT,
         _ => return SUN_TIP.to_owned(),
     };
-    format!("天赋：{}", list.join("、"))
+    format!("天赋: {}", list.join("、"))
 }
 
 fn get_weapon(time: Weekday) -> String {
@@ -80,7 +80,7 @@ fn get_weapon(time: Weekday) -> String {
         Weekday::Wed | Weekday::Sat => weapon::WED_SAT,
         _ => return SUN_TIP.to_owned(),
     };
-    format!("武器：{}", list.join("、"))
+    format!("武器: {}", list.join("、"))
 }
 
 fn get_datetime() -> DateTime<FixedOffset> {
