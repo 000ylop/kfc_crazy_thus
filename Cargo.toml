@@ -5,8 +5,7 @@ edition = "2021"
 repository = "https://github.com/poly000/daily_material"
 license = "MIT"
 authors = ["poly000"]
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+description = "原神当前材料 telegram bot"
 
 [dependencies]
 chrono = "0.4.19"
