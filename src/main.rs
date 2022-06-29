@@ -44,7 +44,7 @@ async fn main() {
 
             let response = bot
                 .answer_inline_query(&query.id, result)
-                .cache_time(0)
+                .cache_time(1)
                 .send()
                 .await;
 
