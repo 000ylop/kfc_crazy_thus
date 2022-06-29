@@ -5,7 +5,7 @@ use teloxide::{
     },
 };
 
-use chrono::{Datelike, Timelike, Weekday};
+use chrono::{Datelike, FixedOffset, TimeZone, Weekday};
 use daily_material::{talent, weapon};
 
 #[tokio::main]
@@ -15,14 +15,27 @@ async fn main() {
     let handler = Update::filter_inline_query().branch(dptree::endpoint(
         |query: InlineQuery, bot: AutoSend<Bot>| async move {
             let time = get_weekday().await;
+
             let talent = get_talent(time).await;
             let weapon = get_weapon(time).await;
+            let talent_next = get_talent(time.succ()).await;
+            let weapon_next = get_weapon(time.succ()).await;
 
-            let content_text = InputMessageContentText::new(format!("{talent}\n{weapon}"));
+            let content_text = InputMessageContentText::new(format!(
+                "{talent}\n{weapon}\n\n次日\n{talent_next}\n{weapon_next}"
+            ));
             let content = InputMessageContent::Text(content_text);
 
-            let talent_text = InlineQueryResult::Article(InlineQueryResultArticle::new("天赋材料", talent, content.clone()));
-            let weapon_text = InlineQueryResult::Article(InlineQueryResultArticle::new("武器材料", weapon, content));
+            let talent_text = InlineQueryResult::Article(InlineQueryResultArticle::new(
+                "天赋材料",
+                talent,
+                content.clone(),
+            ));
+            let weapon_text = InlineQueryResult::Article(InlineQueryResultArticle::new(
+                "武器材料",
+                weapon,
+                content,
+            ));
             let result = vec![talent_text, weapon_text];
 
             let response = bot
@@ -67,20 +80,7 @@ async fn get_weapon(time: Weekday) -> String {
 }
 
 async fn get_weekday() -> Weekday {
-    let time = now().await;
-    let (weekday, hour) = time;
-    if hour >= 20 {
-        weekday.succ()
-    } else {
-        weekday
-    }
-}
-
-async fn now() -> (Weekday, u32) {
-    let time = chrono::Utc::now();
-
-    let weekday = time.weekday();
-    let hour = time.hour();
-    
-    (weekday, hour)
+    let utc = &chrono::Utc::now().naive_utc();
+    let datetime = FixedOffset::east(4 * 3600).from_utc_datetime(utc);
+    datetime.weekday()
 }
