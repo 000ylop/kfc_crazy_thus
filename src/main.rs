@@ -18,7 +18,7 @@ async fn main() {
             let talent = get_talent(time).await;
             let weapon = get_weapon(time).await;
 
-            let content_text = InputMessageContentText::new("欢迎使用这个bot！");
+            let content_text = InputMessageContentText::new(format!("{talent}\n{weapon}"));
             let content = InputMessageContent::Text(content_text);
 
             let talent_text = InlineQueryResult::Article(InlineQueryResultArticle::new("天赋材料", talent, content.clone()));
@@ -51,7 +51,7 @@ async fn get_talent(time: Weekday) -> String {
         Weekday::Mon | Weekday::Thu => talent::MON_THU,
         Weekday::Tue | Weekday::Fri => talent::TUE_FRI,
         Weekday::Wed | Weekday::Sat => talent::WED_SAT,
-        _ => return "周日随便刷！".to_owned(),
+        _ => return "周日随便刷~".to_owned(),
     };
     format!("天赋材料：{}", list.join(" "))
 }
@@ -61,7 +61,7 @@ async fn get_weapon(time: Weekday) -> String {
         Weekday::Mon | Weekday::Thu => weapon::MON_THU,
         Weekday::Tue | Weekday::Fri => weapon::TUE_FRI,
         Weekday::Wed | Weekday::Sat => weapon::WED_SAT,
-        _ => return "周日随便刷！".to_owned(),
+        _ => return "周日随便刷~".to_owned(),
     };
     format!("武器材料：{}", list.join(" "))
 }
