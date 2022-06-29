@@ -21,8 +21,8 @@ async fn main() {
             let content_text = InputMessageContentText::new("欢迎使用这个bot！");
             let content = InputMessageContent::Text(content_text);
 
-            let talent_text = InlineQueryResult::Article(InlineQueryResultArticle::new("天赋", talent, content.clone()));
-            let weapon_text = InlineQueryResult::Article(InlineQueryResultArticle::new("天赋", weapon, content));
+            let talent_text = InlineQueryResult::Article(InlineQueryResultArticle::new("天赋材料", talent, content.clone()));
+            let weapon_text = InlineQueryResult::Article(InlineQueryResultArticle::new("武器材料", weapon, content));
             let result = vec![talent_text, weapon_text];
 
             let response = bot
