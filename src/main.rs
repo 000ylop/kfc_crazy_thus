@@ -5,8 +5,10 @@ use teloxide::{
     },
 };
 
-use chrono::{Datelike, FixedOffset, TimeZone, Weekday};
+use chrono::{DateTime, Datelike, FixedOffset, TimeZone, Timelike, Weekday};
 use daily_material::{talent, weapon};
+
+const SUN_TIP: &str = "周日随便刷哦";
 
 #[tokio::main]
 async fn main() {
@@ -14,15 +16,17 @@ async fn main() {
     let bot = Bot::from_env().auto_send();
     let handler = Update::filter_inline_query().branch(dptree::endpoint(
         |query: InlineQuery, bot: AutoSend<Bot>| async move {
-            let time = get_weekday().await;
+            let datetime = get_datetime();
+            let weekday = datetime.weekday();
+            let (rsec, rmin, rhour) = get_remaining(datetime);
 
-            let talent = get_talent(time).await;
-            let weapon = get_weapon(time).await;
-            let talent_next = get_talent(time.succ()).await;
-            let weapon_next = get_weapon(time.succ()).await;
+            let talent = get_talent(weekday);
+            let weapon = get_weapon(weekday);
+            let talent_next = get_talent(weekday.succ());
+            let weapon_next = get_weapon(weekday.succ());
 
             let content_text = InputMessageContentText::new(format!(
-                "{talent}\n{weapon}\n\n次日\n{talent_next}\n{weapon_next}"
+                "{talent}\n{weapon}\n\n{rhour}:{rmin}:{rsec}后：\n{talent_next}\n{weapon_next}"
             ));
             let content = InputMessageContent::Text(content_text);
 
@@ -36,7 +40,7 @@ async fn main() {
                 weapon,
                 content,
             ));
-            let result = vec![talent_text, weapon_text];
+            let result = [talent_text, weapon_text];
 
             let response = bot
                 .answer_inline_query(&query.id, result)
@@ -59,28 +63,35 @@ async fn main() {
         .await;
 }
 
-async fn get_talent(time: Weekday) -> String {
+fn get_talent(time: Weekday) -> String {
     let list = match time {
         Weekday::Mon | Weekday::Thu => talent::MON_THU,
         Weekday::Tue | Weekday::Fri => talent::TUE_FRI,
         Weekday::Wed | Weekday::Sat => talent::WED_SAT,
-        _ => return "周日随便刷哦".to_owned(),
+        _ => return SUN_TIP.to_owned(),
     };
     format!("天赋材料：{}", list.join(" "))
 }
 
-async fn get_weapon(time: Weekday) -> String {
+fn get_weapon(time: Weekday) -> String {
     let list = match time {
         Weekday::Mon | Weekday::Thu => weapon::MON_THU,
         Weekday::Tue | Weekday::Fri => weapon::TUE_FRI,
         Weekday::Wed | Weekday::Sat => weapon::WED_SAT,
-        _ => return "周日随便刷哦".to_owned(),
+        _ => return SUN_TIP.to_owned(),
     };
     format!("武器材料：{}", list.join(" "))
 }
 
-async fn get_weekday() -> Weekday {
+fn get_datetime() -> DateTime<FixedOffset> {
     let utc = &chrono::Utc::now().naive_utc();
-    let datetime = FixedOffset::east(4 * 3600).from_utc_datetime(utc);
-    datetime.weekday()
+    FixedOffset::east(4 * 3600).from_utc_datetime(utc)
+}
+
+fn get_remaining(time: DateTime<FixedOffset>) -> (u32, u32, u32) {
+    match (time.second(), time.minute(), time.hour()) {
+        (0, 0, hour) => (0, 0, 24 - hour),
+        (0, min, hour) => (0, 60 - min, 23 - hour),
+        (sec, min, hour) => (60 - sec, 59 - min, 23 - hour),
+    }
 }
