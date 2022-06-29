@@ -51,7 +51,7 @@ async fn get_talent(time: Weekday) -> String {
         Weekday::Mon | Weekday::Thu => talent::MON_THU,
         Weekday::Tue | Weekday::Fri => talent::TUE_FRI,
         Weekday::Wed | Weekday::Sat => talent::WED_SAT,
-        _ => return "周日随便刷~".to_owned(),
+        _ => return "周日随便刷哦".to_owned(),
     };
     format!("天赋材料：{}", list.join(" "))
 }
@@ -61,7 +61,7 @@ async fn get_weapon(time: Weekday) -> String {
         Weekday::Mon | Weekday::Thu => weapon::MON_THU,
         Weekday::Tue | Weekday::Fri => weapon::TUE_FRI,
         Weekday::Wed | Weekday::Sat => weapon::WED_SAT,
-        _ => return "周日随便刷~".to_owned(),
+        _ => return "周日随便刷哦".to_owned(),
     };
     format!("武器材料：{}", list.join(" "))
 }
@@ -81,6 +81,6 @@ async fn now() -> (Weekday, u32) {
 
     let weekday = time.weekday();
     let hour = time.hour();
-
+    
     (weekday, hour)
 }
