@@ -26,7 +26,7 @@ async fn main() {
             let weapon_next = get_weapon(weekday.succ());
 
             let content_text = InputMessageContentText::new(format!(
-                "{talent}\n{weapon}\n\n{rhour}:{rmin}:{rsec}后：\n{talent_next}\n{weapon_next}"
+                "{talent}\n{weapon}\n\n{rhour:02}:{rmin:02}:{rsec:02}后：\n{talent_next}\n{weapon_next}"
             ));
             let content = InputMessageContent::Text(content_text);
 
