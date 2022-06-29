@@ -79,7 +79,7 @@ async fn get_weekday() -> Weekday {
 async fn now() -> (Weekday, u32) {
     let time = chrono::Utc::now();
 
-    let weekday = time.date().weekday();
+    let weekday = time.weekday();
     let hour = time.hour();
 
     (weekday, hour)
