@@ -31,12 +31,12 @@ async fn main() {
             let content = InputMessageContent::Text(content_text);
 
             let talent_text = InlineQueryResult::Article(InlineQueryResultArticle::new(
-                "天赋材料",
+                "天赋",
                 talent,
                 content.clone(),
             ));
             let weapon_text = InlineQueryResult::Article(InlineQueryResultArticle::new(
-                "武器材料",
+                "武器",
                 weapon,
                 content,
             ));
@@ -70,7 +70,7 @@ fn get_talent(time: Weekday) -> String {
         Weekday::Wed | Weekday::Sat => talent::WED_SAT,
         _ => return SUN_TIP.to_owned(),
     };
-    format!("天赋材料：{}", list.join(" "))
+    format!("天赋：{}", list.join("、"))
 }
 
 fn get_weapon(time: Weekday) -> String {
@@ -80,7 +80,7 @@ fn get_weapon(time: Weekday) -> String {
         Weekday::Wed | Weekday::Sat => weapon::WED_SAT,
         _ => return SUN_TIP.to_owned(),
     };
-    format!("武器材料：{}", list.join(" "))
+    format!("武器：{}", list.join("、"))
 }
 
 fn get_datetime() -> DateTime<FixedOffset> {
