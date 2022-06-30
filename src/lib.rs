@@ -1,5 +1,8 @@
 const N: usize = 3;
 
+pub const SUN_TIP: &str = "周日随便刷哦";
+pub const SPLITTER: &str = "、";
+
 pub mod weapon {
     use crate::N;
     pub const MON_THU: [&'static str; N] = ["孤云寒林", "高塔孤王", "远海夷地"];
