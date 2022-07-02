@@ -1,6 +1,5 @@
 const N: usize = 3;
 
-pub const SUN_TIP: &str = "周日随便刷哦";
 pub const SPLITTER: &str = "、";
 
 pub mod weapon {
