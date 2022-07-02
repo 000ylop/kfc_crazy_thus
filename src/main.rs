@@ -19,7 +19,7 @@ async fn main() {
             let result = get_materials();
             let response = bot
                 .answer_inline_query(&query.id, result)
-                .cache_time(1)
+                .cache_time(0)
                 .send()
                 .await;
 
