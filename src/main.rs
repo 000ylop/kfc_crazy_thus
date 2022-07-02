@@ -3,7 +3,7 @@ use teloxide::{
     prelude::*,
     types::{
         InlineQueryResult::{self, Article},
-        InlineQueryResultArticle, InputMessageContent, InputMessageContentText,
+        InlineQueryResultArticle, InputMessageContent, InputMessageContentText, ParseMode,
     },
 };
 
@@ -84,16 +84,22 @@ fn get_materials() -> Vec<InlineQueryResult> {
     let weapon_list = weapon(weekday);
 
     if let (Some(talent_list), Some(weapon_list)) = (talent_list, weapon_list) {
-        let talents = format!(
-            "天赋：{}\n另见[genshin.pub](https://genshin.pub/daily)",
-            talent_list.join(SPLITTER)
+        let talents = format!("天赋：{}", talent_list.join(SPLITTER));
+        let weapons = format!("武器：{}", weapon_list.join(SPLITTER));
+        let content_talent = InputMessageContent::Text(
+            InputMessageContentText::new(
+                talents.clone() + "\n另见 [genshin.pub](https://genshin.pub/daily)",
+            )
+            .parse_mode(ParseMode::MarkdownV2)
+            .disable_web_page_preview(true),
         );
-        let weapons = format!(
-            "武器：{}\n另见[genshin.pub](https://genshin.pub/daily)",
-            weapon_list.join(SPLITTER)
+        let content_weapon = InputMessageContent::Text(
+            InputMessageContentText::new(
+                weapons.clone() + "\n另见 [genshin.pub](https://genshin.pub/daily)",
+            )
+            .parse_mode(ParseMode::MarkdownV2)
+            .disable_web_page_preview(true),
         );
-        let content_talent = InputMessageContent::Text(InputMessageContentText::new(&talents));
-        let content_weapon = InputMessageContent::Text(InputMessageContentText::new(&weapons));
 
         let talent_text = Article(InlineQueryResultArticle::new(
             "天赋",
