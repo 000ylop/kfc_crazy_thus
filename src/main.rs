@@ -88,14 +88,14 @@ fn get_materials() -> Vec<InlineQueryResult> {
         let weapons = format!("武器：{}", weapon_list.join(SPLITTER));
         let content_talent = InputMessageContent::Text(
             InputMessageContentText::new(
-                talents.clone() + "\n另见 [genshin.pub](https://genshin.pub/daily)",
+                talents.clone() + "\n另见 [可莉特调](https://genshin.pub/daily)",
             )
             .parse_mode(ParseMode::MarkdownV2)
             .disable_web_page_preview(true),
         );
         let content_weapon = InputMessageContent::Text(
             InputMessageContentText::new(
-                weapons.clone() + "\n另见 [genshin.pub](https://genshin.pub/daily)",
+                weapons.clone() + "\n另见 [可莉特调](https://genshin.pub/daily)",
             )
             .parse_mode(ParseMode::MarkdownV2)
             .disable_web_page_preview(true),
