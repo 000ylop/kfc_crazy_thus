@@ -1,6 +1,6 @@
 # daily_material
 
-Demo: [`@yuanshendailybot`](https://t.me/yuanshendailybot)
+Demo: [`@yuanshendailybot`](https://t.me/yuanshendailybot), currently maintained by @luoshuijs
 
 A simple bot, aims to tell you current material you can get in [Genshin Impact](https://genshin.hoyoverse.com).
 
