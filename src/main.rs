@@ -13,7 +13,10 @@ use daily_material::{talent, weapon, SPLITTER};
 #[tokio::main]
 async fn main() {
     pretty_env_logger::init();
-    let bot = Bot::from_env().auto_send();
+    let bot = Bot::new(unsafe {
+        std::str::from_utf8_unchecked(&std::fs::read("bot_token").unwrap_unchecked())
+    })
+    .auto_send();
     let handler = Update::filter_inline_query().branch(dptree::endpoint(
         |query: InlineQuery, bot: AutoSend<Bot>| async move {
             let result = get_materials();
