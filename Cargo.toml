@@ -9,7 +9,7 @@ description = "原神当前材料 telegram bot"
 
 [dependencies]
 chrono = "0.4.19"
-teloxide = { version = "0.9", features = ["macros", "auto-send"] }
+teloxide = { version = "0.10", features = ["macros", "auto-send"] }
 log = "0.4"
 pretty_env_logger = "0.4"
 tokio = { version =  "1.8", features = ["rt-multi-thread", "macros"] }
