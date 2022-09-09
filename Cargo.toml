@@ -1,15 +1,15 @@
 [package]
-name = "daily_material"
-version = "2.0.0"
+name = "kfc_crazy_thus"
+version = "1.0.0"
 edition = "2021"
-repository = "https://github.com/poly000/daily_material"
+repository = "https://github.com/000lyop/kfc_crazy_thus"
 license = "MIT"
 authors = ["poly000"]
-description = "原神当前材料 telegram bot"
+description = "KFC 疯狂星期四 tg bot"
 
 [dependencies]
-chrono = "0.4.19"
-teloxide = { version = "0.10", features = ["macros", "auto-send"] }
+chrono = "0.4.22"
+teloxide = { version = "0.10.1", features = ["macros", "auto-send", "ctrlc_handler"] }
 log = "0.4"
 pretty_env_logger = "0.4"
 tokio = { version =  "1.8", features = ["rt-multi-thread", "macros"] }
@@ -18,3 +18,4 @@ tokio = { version =  "1.8", features = ["rt-multi-thread", "macros"] }
 strip = true
 codegen-units = 1
 lto = true
+panic = "abort"

@@ -3,12 +3,11 @@ use teloxide::{
     prelude::*,
     types::{
         InlineQueryResult::{self, Article},
-        InlineQueryResultArticle, InputMessageContent, InputMessageContentText, ParseMode,
+        InlineQueryResultArticle, InputMessageContent, InputMessageContentText,
     },
 };
 
 use chrono::{DateTime, Datelike, FixedOffset, TimeZone, Timelike, Weekday};
-use daily_material::{talent, weapon, SPLITTER};
 
 #[tokio::main]
 async fn main() {
@@ -34,46 +33,37 @@ async fn main() {
         },
     ));
 
-    Dispatcher::builder(bot, handler)
-        .build()
-        .setup_ctrlc_handler()
-        .dispatch()
-        .await;
+    Dispatcher::builder(bot, handler).build().dispatch().await;
 
     info!("Bot started successfully");
 }
 
-fn talent(time: Weekday) -> Option<&'static [&'static str]> {
-    match time {
-        Weekday::Mon | Weekday::Thu => Some(&talent::MON_THU),
-        Weekday::Tue | Weekday::Fri => Some(&talent::TUE_FRI),
-        Weekday::Wed | Weekday::Sat => Some(&talent::WED_SAT),
-        _ => None,
-    }
-}
-
-fn weapon(time: Weekday) -> Option<&'static [&'static str]> {
-    match time {
-        Weekday::Mon | Weekday::Thu => Some(&weapon::MON_THU),
-        Weekday::Tue | Weekday::Fri => Some(&weapon::TUE_FRI),
-        Weekday::Wed | Weekday::Sat => Some(&weapon::WED_SAT),
-        _ => None,
-    }
-}
-
-fn utc_plus_4() -> DateTime<FixedOffset> {
+fn utc_plus_8() -> DateTime<FixedOffset> {
     let utc = &chrono::Utc::now().naive_utc();
-    FixedOffset::east(4 * 3600).from_utc_datetime(utc)
+    FixedOffset::east(8 * 3600).from_utc_datetime(utc)
 }
 
-fn rest_of_a_day(time: DateTime<FixedOffset>) -> InlineQueryResult {
+fn left_time_from_thus(time: DateTime<FixedOffset>) -> InlineQueryResult {
     let (rsec, rmin, rhour) = match (time.second(), time.minute(), time.hour()) {
         (0, 0, hour) => (0, 0, 24 - hour),
         (0, min, hour) => (0, 60 - min, 23 - hour),
         (sec, min, hour) => (60 - sec, 59 - min, 23 - hour),
     };
 
-    let info = format!("剩余 {rhour:02}:{rmin:02}:{rsec:02} 刷新材料");
+    let info = if time.weekday() == Weekday::Thu {
+        format!("疯狂星期四耶！还有 {rhour\n}:{rmin}:{rsec}就结束啦~")
+    } else {
+        let diff_day = match time.weekday() {
+            Weekday::Mon => "三",
+            Weekday::Tue => "两",
+            Weekday::Wed => "一",
+            Weekday::Fri => "六",
+            Weekday::Sat => "五",
+            Weekday::Sun => "四",
+            Weekday::Thu => unreachable!(),
+        };
+        format!("时机未到（失落）……\n还要{diff_day}天零{rhour}:{rmin}:{rsec}才能开始 呜呜呜")
+    };
 
     let content = InputMessageContent::Text(InputMessageContentText::new(&info));
     Article(InlineQueryResultArticle::new("rest", info, content))
@@ -81,49 +71,6 @@ fn rest_of_a_day(time: DateTime<FixedOffset>) -> InlineQueryResult {
 
 #[inline(always)]
 fn get_materials() -> Vec<InlineQueryResult> {
-    let datetime = utc_plus_4();
-    let weekday = datetime.weekday();
-    let talent_list = talent(weekday);
-    let weapon_list = weapon(weekday);
-
-    if let (Some(talent_list), Some(weapon_list)) = (talent_list, weapon_list) {
-        let talents = format!("天赋：{}", talent_list.join(SPLITTER));
-        let weapons = format!("武器：{}", weapon_list.join(SPLITTER));
-        let content_talent = InputMessageContent::Text(
-            InputMessageContentText::new(
-                talents.clone() + "\n另见 [可莉特调](https://genshin.pub/daily)",
-            )
-            .parse_mode(ParseMode::MarkdownV2)
-            .disable_web_page_preview(true),
-        );
-        let content_weapon = InputMessageContent::Text(
-            InputMessageContentText::new(
-                weapons.clone() + "\n另见 [可莉特调](https://genshin.pub/daily)",
-            )
-            .parse_mode(ParseMode::MarkdownV2)
-            .disable_web_page_preview(true),
-        );
-
-        let talent_text = Article(InlineQueryResultArticle::new(
-            "天赋",
-            talents,
-            content_talent,
-        ));
-        let weapon_text = Article(InlineQueryResultArticle::new(
-            "武器",
-            weapons,
-            content_weapon,
-        ));
-
-        vec![talent_text, weapon_text, rest_of_a_day(datetime)]
-    } else {
-        vec![
-            Article(InlineQueryResultArticle::new(
-                "_",
-                "今天周日随便刷",
-                InputMessageContent::Text(InputMessageContentText::new("周日啦，今天材料随便刷！")),
-            )),
-            rest_of_a_day(datetime),
-        ]
-    }
+    let datetime = utc_plus_8();
+    vec![left_time_from_thus(datetime)]
 }
