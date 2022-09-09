@@ -1,6 +1,6 @@
 [package]
 name = "kfc_crazy_thus"
-version = "1.0.1"
+version = "1.0.2"
 edition = "2021"
 repository = "https://github.com/000lyop/kfc_crazy_thus"
 license = "MIT"
@@ -18,3 +18,4 @@ tokio = { version =  "1.8", features = ["rt-multi-thread", "macros"] }
 strip = true
 codegen-units = 1
 lto = true
+panic = "abort"

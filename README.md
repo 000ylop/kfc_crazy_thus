@@ -1,7 +1,9 @@
-# daily_material
+# kfc_crazy_thus
 
-Demo: [`@yuanshendailybot`](https://t.me/yuanshendailybot), currently maintained by @luoshuijs
+> *thus是拼写错误，应该为thur*
 
-A simple bot, aims to tell you current material you can get in [Genshin Impact](https://genshin.hoyoverse.com).
+是疯狂星期四耶！
 
-We only provide Simplified Chinese version. But you can easily translate [lib.rs](src/lib.rs) and tips in [main.rs](src/main.rs#L50,L60,L87,L91-L92) into your langauge.
+## todo
+
+[ ] 可配置的格式化
