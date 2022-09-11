@@ -48,19 +48,19 @@ fn left_time_from_thus(time: DateTime<FixedOffset>) -> InlineQueryResult {
     };
 
     let info = if time.weekday() == Weekday::Thu {
-        format!("疯狂星期四耶！\n还有 {rhour:02}:{rmin:02}:{rsec:02}就结束啦~")
+        format!("疯狂星期四耶！")
     } else {
         let diff_day = match time.weekday() {
-            Weekday::Mon => "三",
-            Weekday::Tue => "两",
-            Weekday::Wed => "一",
-            Weekday::Fri => "六",
-            Weekday::Sat => "五",
-            Weekday::Sun => "四",
+            Weekday::Mon => "二",
+            Weekday::Tue => "一",
+            Weekday::Wed => "零",
+            Weekday::Fri => "五",
+            Weekday::Sat => "四",
+            Weekday::Sun => "三",
 
             Weekday::Thu => unreachable!(),
         };
-        format!("失落……\n还要{diff_day}天零{rhour:02}:{rmin:02}:{rsec:02}才能开始 呜呜呜")
+        format!("失落……\n还要{diff_day}天 {rhour:02}:{rmin:02}:{rsec:02} 才能开始 呜呜呜")
     };
 
     let content = InputMessageContent::Text(InputMessageContentText::new(&info));

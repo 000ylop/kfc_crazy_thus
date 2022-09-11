@@ -560,7 +560,7 @@ dependencies = [
 
 [[package]]
 name = "kfc_crazy_thus"
-version = "1.0.2"
+version = "1.0.3"
 dependencies = [
  "chrono",
  "log",

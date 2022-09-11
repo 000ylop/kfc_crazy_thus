@@ -1,6 +1,6 @@
 [package]
 name = "kfc_crazy_thus"
-version = "1.0.2"
+version = "1.0.3"
 edition = "2021"
 repository = "https://github.com/000lyop/kfc_crazy_thus"
 license = "MIT"
